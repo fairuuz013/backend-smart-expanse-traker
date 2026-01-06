@@ -1,9 +1,9 @@
 model Wallet {
-  id         Int           @id @default(autoincrement())
-  user_id    Int
-  name       String        @db.VarChar
-  balance    Decimal       @db.Decimal // Berdasarkan source: 152
-  created_at DateTime      @default(now()) @db.Timestamp
-  user       User          @relation(fields: [user_id], references: [id])
+  id           String        @id @default(uuid()) // Diubah ke UUID
+  user_id      String        // Foreign Key menjadi String
+  name         String        @db.VarChar
+  balance      Decimal       @db.Decimal
+  created_at   DateTime      @default(now()) @db.Timestamp
+  user         User          @relation(fields: [user_id], references: [id])
   transactions Transaction[]
 }

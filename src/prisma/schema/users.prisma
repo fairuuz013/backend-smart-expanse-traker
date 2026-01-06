@@ -1,12 +1,12 @@
 model User {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(uuid()) // Diubah ke UUID
   full_name     String         @db.VarChar
-  email         String         @unique @db.VarChar // Berdasarkan source: 111
-  password      String         @db.VarChar // Berdasarkan source: 137
+  email         String         @unique @db.VarChar
+  password      String         @db.VarChar
   role          String?        @db.VarChar
   created_at    DateTime       @default(now()) @db.Timestamp
   
-  // Relasi
+  // Relasi otomatis mengikuti tipe data String
   wallets       Wallet[]
   budgets       Budget[]
   notifications Notification[]
