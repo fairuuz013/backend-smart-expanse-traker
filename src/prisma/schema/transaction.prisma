@@ -1,12 +1,12 @@
 model Transaction {
-  id               String       @id @default(uuid()) 
-  user_id          String      
-  category_id      Int         
-  wallet_id        String       
-  amount           Decimal      @db.Decimal
-  type             String       @db.VarChar
-  note             String?      @db.Text
-  transaction_date DateTime     @db.Timestamp
+  id               String          @id @default(uuid())
+  user_id          String
+  category_id      Int
+  wallet_id        String
+  amount           Decimal         @db.Decimal 
+  type             TransactionType // Menggunakan Enum
+  note             String?         @db.Text
+  transaction_date DateTime        @db.Timestamp
   
   wallet           Wallet       @relation(fields: [wallet_id], references: [id])
   category         Category     @relation(fields: [category_id], references: [id])
