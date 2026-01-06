@@ -70,6 +70,47 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 export type Wallet = $Result.DefaultSelection<Prisma.$WalletPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const TransactionType: {
+  INCOME: 'INCOME',
+  EXPENSE: 'EXPENSE'
+};
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const OtpType: {
+  REGISTRATION: 'REGISTRATION',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+};
+
+export type OtpType = (typeof OtpType)[keyof typeof OtpType]
+
+
+export const UserRole: {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+}
+
+export type TransactionType = $Enums.TransactionType
+
+export const TransactionType: typeof $Enums.TransactionType
+
+export type OtpType = $Enums.OtpType
+
+export const OtpType: typeof $Enums.OtpType
+
+export type UserRole = $Enums.UserRole
+
+export const UserRole: typeof $Enums.UserRole
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -5193,14 +5234,14 @@ export namespace Prisma {
     id: number | null
     name: string | null
     icon: string | null
-    type: string | null
+    type: $Enums.TransactionType | null
   }
 
   export type CategoryMaxAggregateOutputType = {
     id: number | null
     name: string | null
     icon: string | null
-    type: string | null
+    type: $Enums.TransactionType | null
   }
 
   export type CategoryCountAggregateOutputType = {
@@ -5332,7 +5373,7 @@ export namespace Prisma {
     id: number
     name: string
     icon: string | null
-    type: string
+    type: $Enums.TransactionType
     _count: CategoryCountAggregateOutputType | null
     _avg: CategoryAvgAggregateOutputType | null
     _sum: CategorySumAggregateOutputType | null
@@ -5401,7 +5442,7 @@ export namespace Prisma {
       id: number
       name: string
       icon: string | null
-      type: string
+      type: $Enums.TransactionType
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -5829,7 +5870,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Category", 'Int'>
     readonly name: FieldRef<"Category", 'String'>
     readonly icon: FieldRef<"Category", 'String'>
-    readonly type: FieldRef<"Category", 'String'>
+    readonly type: FieldRef<"Category", 'TransactionType'>
   }
     
 
@@ -7389,7 +7430,7 @@ export namespace Prisma {
     id: number | null
     user_id: string | null
     code: string | null
-    type: string | null
+    type: $Enums.OtpType | null
     expired_at: Date | null
   }
 
@@ -7397,7 +7438,7 @@ export namespace Prisma {
     id: number | null
     user_id: string | null
     code: string | null
-    type: string | null
+    type: $Enums.OtpType | null
     expired_at: Date | null
   }
 
@@ -7534,7 +7575,7 @@ export namespace Prisma {
     id: number
     user_id: string
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date
     _count: OtpCountAggregateOutputType | null
     _avg: OtpAvgAggregateOutputType | null
@@ -7612,7 +7653,7 @@ export namespace Prisma {
       id: number
       user_id: string
       code: string
-      type: string
+      type: $Enums.OtpType
       expired_at: Date
     }, ExtArgs["result"]["otp"]>
     composites: {}
@@ -8041,7 +8082,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Otp", 'Int'>
     readonly user_id: FieldRef<"Otp", 'String'>
     readonly code: FieldRef<"Otp", 'String'>
-    readonly type: FieldRef<"Otp", 'String'>
+    readonly type: FieldRef<"Otp", 'OtpType'>
     readonly expired_at: FieldRef<"Otp", 'DateTime'>
   }
     
@@ -10533,7 +10574,7 @@ export namespace Prisma {
     category_id: number | null
     wallet_id: string | null
     amount: Decimal | null
-    type: string | null
+    type: $Enums.TransactionType | null
     note: string | null
     transaction_date: Date | null
   }
@@ -10544,7 +10585,7 @@ export namespace Prisma {
     category_id: number | null
     wallet_id: string | null
     amount: Decimal | null
-    type: string | null
+    type: $Enums.TransactionType | null
     note: string | null
     transaction_date: Date | null
   }
@@ -10698,7 +10739,7 @@ export namespace Prisma {
     category_id: number
     wallet_id: string
     amount: Decimal
-    type: string
+    type: $Enums.TransactionType
     note: string | null
     transaction_date: Date
     _count: TransactionCountAggregateOutputType | null
@@ -10803,7 +10844,7 @@ export namespace Prisma {
       category_id: number
       wallet_id: string
       amount: Prisma.Decimal
-      type: string
+      type: $Enums.TransactionType
       note: string | null
       transaction_date: Date
     }, ExtArgs["result"]["transaction"]>
@@ -11237,7 +11278,7 @@ export namespace Prisma {
     readonly category_id: FieldRef<"Transaction", 'Int'>
     readonly wallet_id: FieldRef<"Transaction", 'String'>
     readonly amount: FieldRef<"Transaction", 'Decimal'>
-    readonly type: FieldRef<"Transaction", 'String'>
+    readonly type: FieldRef<"Transaction", 'TransactionType'>
     readonly note: FieldRef<"Transaction", 'String'>
     readonly transaction_date: FieldRef<"Transaction", 'DateTime'>
   }
@@ -11693,7 +11734,7 @@ export namespace Prisma {
     full_name: string | null
     email: string | null
     password: string | null
-    role: string | null
+    role: $Enums.UserRole | null
     created_at: Date | null
   }
 
@@ -11702,7 +11743,7 @@ export namespace Prisma {
     full_name: string | null
     email: string | null
     password: string | null
-    role: string | null
+    role: $Enums.UserRole | null
     created_at: Date | null
   }
 
@@ -11822,7 +11863,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role: string | null
+    role: $Enums.UserRole
     created_at: Date
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -11914,7 +11955,7 @@ export namespace Prisma {
       full_name: string
       email: string
       password: string
-      role: string | null
+      role: $Enums.UserRole
       created_at: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -12349,7 +12390,7 @@ export namespace Prisma {
     readonly full_name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
-    readonly role: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'UserRole'>
     readonly created_at: FieldRef<"User", 'DateTime'>
   }
     
@@ -14244,9 +14285,51 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TransactionType'
+   */
+  export type EnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionType[]'
+   */
+  export type ListEnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'OtpType'
+   */
+  export type EnumOtpTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OtpType'>
+    
+
+
+  /**
+   * Reference to a field of type 'OtpType[]'
+   */
+  export type ListEnumOtpTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OtpType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole'
+   */
+  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
     
 
 
@@ -14438,7 +14521,7 @@ export namespace Prisma {
     id?: IntFilter<"Category"> | number
     name?: StringFilter<"Category"> | string
     icon?: StringNullableFilter<"Category"> | string | null
-    type?: StringFilter<"Category"> | string
+    type?: EnumTransactionTypeFilter<"Category"> | $Enums.TransactionType
     transactions?: TransactionListRelationFilter
   }
 
@@ -14457,7 +14540,7 @@ export namespace Prisma {
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     name?: StringFilter<"Category"> | string
     icon?: StringNullableFilter<"Category"> | string | null
-    type?: StringFilter<"Category"> | string
+    type?: EnumTransactionTypeFilter<"Category"> | $Enums.TransactionType
     transactions?: TransactionListRelationFilter
   }, "id">
 
@@ -14480,7 +14563,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Category"> | number
     name?: StringWithAggregatesFilter<"Category"> | string
     icon?: StringNullableWithAggregatesFilter<"Category"> | string | null
-    type?: StringWithAggregatesFilter<"Category"> | string
+    type?: EnumTransactionTypeWithAggregatesFilter<"Category"> | $Enums.TransactionType
   }
 
   export type NotificationWhereInput = {
@@ -14552,7 +14635,7 @@ export namespace Prisma {
     id?: IntFilter<"Otp"> | number
     user_id?: StringFilter<"Otp"> | string
     code?: StringFilter<"Otp"> | string
-    type?: StringFilter<"Otp"> | string
+    type?: EnumOtpTypeFilter<"Otp"> | $Enums.OtpType
     expired_at?: DateTimeFilter<"Otp"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -14573,7 +14656,7 @@ export namespace Prisma {
     NOT?: OtpWhereInput | OtpWhereInput[]
     user_id?: StringFilter<"Otp"> | string
     code?: StringFilter<"Otp"> | string
-    type?: StringFilter<"Otp"> | string
+    type?: EnumOtpTypeFilter<"Otp"> | $Enums.OtpType
     expired_at?: DateTimeFilter<"Otp"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -14598,7 +14681,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Otp"> | number
     user_id?: StringWithAggregatesFilter<"Otp"> | string
     code?: StringWithAggregatesFilter<"Otp"> | string
-    type?: StringWithAggregatesFilter<"Otp"> | string
+    type?: EnumOtpTypeWithAggregatesFilter<"Otp"> | $Enums.OtpType
     expired_at?: DateTimeWithAggregatesFilter<"Otp"> | Date | string
   }
 
@@ -14705,7 +14788,7 @@ export namespace Prisma {
     category_id?: IntFilter<"Transaction"> | number
     wallet_id?: StringFilter<"Transaction"> | string
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
-    type?: StringFilter<"Transaction"> | string
+    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     note?: StringNullableFilter<"Transaction"> | string | null
     transaction_date?: DateTimeFilter<"Transaction"> | Date | string
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
@@ -14736,7 +14819,7 @@ export namespace Prisma {
     category_id?: IntFilter<"Transaction"> | number
     wallet_id?: StringFilter<"Transaction"> | string
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
-    type?: StringFilter<"Transaction"> | string
+    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     note?: StringNullableFilter<"Transaction"> | string | null
     transaction_date?: DateTimeFilter<"Transaction"> | Date | string
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
@@ -14769,7 +14852,7 @@ export namespace Prisma {
     category_id?: IntWithAggregatesFilter<"Transaction"> | number
     wallet_id?: StringWithAggregatesFilter<"Transaction"> | string
     amount?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
-    type?: StringWithAggregatesFilter<"Transaction"> | string
+    type?: EnumTransactionTypeWithAggregatesFilter<"Transaction"> | $Enums.TransactionType
     note?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     transaction_date?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
@@ -14782,7 +14865,7 @@ export namespace Prisma {
     full_name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    role?: StringNullableFilter<"User"> | string | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     created_at?: DateTimeFilter<"User"> | Date | string
     wallets?: WalletListRelationFilter
     budgets?: BudgetListRelationFilter
@@ -14797,7 +14880,7 @@ export namespace Prisma {
     full_name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    role?: SortOrderInput | SortOrder
+    role?: SortOrder
     created_at?: SortOrder
     wallets?: WalletOrderByRelationAggregateInput
     budgets?: BudgetOrderByRelationAggregateInput
@@ -14815,7 +14898,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     full_name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    role?: StringNullableFilter<"User"> | string | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     created_at?: DateTimeFilter<"User"> | Date | string
     wallets?: WalletListRelationFilter
     budgets?: BudgetListRelationFilter
@@ -14830,7 +14913,7 @@ export namespace Prisma {
     full_name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    role?: SortOrderInput | SortOrder
+    role?: SortOrder
     created_at?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -14845,7 +14928,7 @@ export namespace Prisma {
     full_name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
-    role?: StringNullableWithAggregatesFilter<"User"> | string | null
+    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
@@ -15067,7 +15150,7 @@ export namespace Prisma {
   export type CategoryCreateInput = {
     name: string
     icon?: string | null
-    type: string
+    type: $Enums.TransactionType
     transactions?: TransactionCreateNestedManyWithoutCategoryInput
   }
 
@@ -15075,14 +15158,14 @@ export namespace Prisma {
     id?: number
     name: string
     icon?: string | null
-    type: string
+    type: $Enums.TransactionType
     transactions?: TransactionUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     transactions?: TransactionUpdateManyWithoutCategoryNestedInput
   }
 
@@ -15090,7 +15173,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     transactions?: TransactionUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -15098,20 +15181,20 @@ export namespace Prisma {
     id?: number
     name: string
     icon?: string | null
-    type: string
+    type: $Enums.TransactionType
   }
 
   export type CategoryUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   }
 
   export type CategoryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   }
 
   export type NotificationCreateInput = {
@@ -15175,7 +15258,7 @@ export namespace Prisma {
 
   export type OtpCreateInput = {
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
     user: UserCreateNestedOneWithoutOtpsInput
   }
@@ -15184,13 +15267,13 @@ export namespace Prisma {
     id?: number
     user_id: string
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
   }
 
   export type OtpUpdateInput = {
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOtpsNestedInput
   }
@@ -15199,7 +15282,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15207,13 +15290,13 @@ export namespace Prisma {
     id?: number
     user_id: string
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
   }
 
   export type OtpUpdateManyMutationInput = {
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15221,7 +15304,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15316,7 +15399,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     wallet: WalletCreateNestedOneWithoutTransactionsInput
@@ -15330,7 +15413,7 @@ export namespace Prisma {
     category_id: number
     wallet_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutTransactionInput
@@ -15340,7 +15423,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
@@ -15354,7 +15437,7 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     wallet_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutTransactionNestedInput
@@ -15366,7 +15449,7 @@ export namespace Prisma {
     category_id: number
     wallet_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
   }
@@ -15375,7 +15458,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15386,7 +15469,7 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     wallet_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15396,7 +15479,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     budgets?: BudgetCreateNestedManyWithoutUserInput
@@ -15411,7 +15494,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
@@ -15426,7 +15509,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     budgets?: BudgetUpdateManyWithoutUserNestedInput
@@ -15441,7 +15524,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
@@ -15456,7 +15539,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
   }
 
@@ -15465,7 +15548,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15474,14 +15557,14 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WalletCreateInput = {
     id?: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
     user: UserCreateNestedOneWithoutWalletsInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
@@ -15491,7 +15574,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
   }
@@ -15518,7 +15601,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
   }
 
@@ -15782,6 +15865,13 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type EnumTransactionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionTypeFilter<$PrismaModel> | $Enums.TransactionType
+  }
+
   export type TransactionListRelationFilter = {
     every?: TransactionWhereInput
     some?: TransactionWhereInput
@@ -15819,6 +15909,16 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.TransactionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionTypeFilter<$PrismaModel>
+    _max?: NestedEnumTransactionTypeFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -15869,6 +15969,13 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type EnumOtpTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OtpType | EnumOtpTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOtpTypeFilter<$PrismaModel> | $Enums.OtpType
+  }
+
   export type OtpCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
@@ -15899,6 +16006,16 @@ export namespace Prisma {
 
   export type OtpSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumOtpTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OtpType | EnumOtpTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOtpTypeWithAggregatesFilter<$PrismaModel> | $Enums.OtpType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOtpTypeFilter<$PrismaModel>
+    _max?: NestedEnumOtpTypeFilter<$PrismaModel>
   }
 
   export type PasswordResetCountOrderByAggregateInput = {
@@ -16011,6 +16128,13 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
   export type WalletListRelationFilter = {
     every?: WalletWhereInput
     some?: WalletWhereInput
@@ -16096,6 +16220,16 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     created_at?: SortOrder
+  }
+
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type WalletCountOrderByAggregateInput = {
@@ -16214,6 +16348,10 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
+  export type EnumTransactionTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TransactionType
+  }
+
   export type TransactionUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<TransactionCreateWithoutCategoryInput, TransactionUncheckedCreateWithoutCategoryInput> | TransactionCreateWithoutCategoryInput[] | TransactionUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutCategoryInput | TransactionCreateOrConnectWithoutCategoryInput[]
@@ -16264,6 +16402,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutOtpsInput, UserUncheckedCreateWithoutOtpsInput>
     connectOrCreate?: UserCreateOrConnectWithoutOtpsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type EnumOtpTypeFieldUpdateOperationsInput = {
+    set?: $Enums.OtpType
   }
 
   export type UserUpdateOneRequiredWithoutOtpsNestedInput = {
@@ -16440,6 +16582,10 @@ export namespace Prisma {
     connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
     createMany?: ActivityLogCreateManyUserInputEnvelope
     connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  }
+
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
   }
 
   export type WalletUpdateManyWithoutUserNestedInput = {
@@ -16829,6 +16975,23 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type NestedEnumTransactionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionTypeFilter<$PrismaModel> | $Enums.TransactionType
+  }
+
+  export type NestedEnumTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.TransactionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionTypeFilter<$PrismaModel>
+    _max?: NestedEnumTransactionTypeFilter<$PrismaModel>
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -16842,12 +17005,46 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedEnumOtpTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OtpType | EnumOtpTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOtpTypeFilter<$PrismaModel> | $Enums.OtpType
+  }
+
+  export type NestedEnumOtpTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OtpType | EnumOtpTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OtpType[] | ListEnumOtpTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOtpTypeWithAggregatesFilter<$PrismaModel> | $Enums.OtpType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOtpTypeFilter<$PrismaModel>
+    _max?: NestedEnumOtpTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutActivity_logsInput = {
     id?: string
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     budgets?: BudgetCreateNestedManyWithoutUserInput
@@ -16861,7 +17058,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
@@ -16891,7 +17088,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     budgets?: BudgetUpdateManyWithoutUserNestedInput
@@ -16905,7 +17102,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
@@ -16918,7 +17115,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     wallet: WalletCreateNestedOneWithoutTransactionsInput
@@ -16931,7 +17128,7 @@ export namespace Prisma {
     category_id: number
     wallet_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
   }
@@ -16956,7 +17153,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
@@ -16969,7 +17166,7 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     wallet_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16979,7 +17176,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
@@ -16993,7 +17190,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -17023,7 +17220,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
@@ -17037,7 +17234,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -17050,7 +17247,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     wallet: WalletCreateNestedOneWithoutTransactionsInput
@@ -17062,7 +17259,7 @@ export namespace Prisma {
     user_id: string
     wallet_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutTransactionInput
@@ -17103,7 +17300,7 @@ export namespace Prisma {
     category_id?: IntFilter<"Transaction"> | number
     wallet_id?: StringFilter<"Transaction"> | string
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
-    type?: StringFilter<"Transaction"> | string
+    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     note?: StringNullableFilter<"Transaction"> | string | null
     transaction_date?: DateTimeFilter<"Transaction"> | Date | string
   }
@@ -17113,7 +17310,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     budgets?: BudgetCreateNestedManyWithoutUserInput
@@ -17127,7 +17324,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
@@ -17157,7 +17354,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     budgets?: BudgetUpdateManyWithoutUserNestedInput
@@ -17171,7 +17368,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
@@ -17185,7 +17382,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     budgets?: BudgetCreateNestedManyWithoutUserInput
@@ -17199,7 +17396,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
@@ -17229,7 +17426,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     budgets?: BudgetUpdateManyWithoutUserNestedInput
@@ -17243,7 +17440,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
@@ -17257,7 +17454,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletCreateNestedManyWithoutUserInput
     budgets?: BudgetCreateNestedManyWithoutUserInput
@@ -17271,7 +17468,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     wallets?: WalletUncheckedCreateNestedManyWithoutUserInput
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
@@ -17301,7 +17498,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUpdateManyWithoutUserNestedInput
     budgets?: BudgetUpdateManyWithoutUserNestedInput
@@ -17315,7 +17512,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     wallets?: WalletUncheckedUpdateManyWithoutUserNestedInput
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
@@ -17327,7 +17524,7 @@ export namespace Prisma {
   export type WalletCreateWithoutTransactionsInput = {
     id?: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
     user: UserCreateNestedOneWithoutWalletsInput
   }
@@ -17336,7 +17533,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
   }
 
@@ -17348,14 +17545,14 @@ export namespace Prisma {
   export type CategoryCreateWithoutTransactionsInput = {
     name: string
     icon?: string | null
-    type: string
+    type: $Enums.TransactionType
   }
 
   export type CategoryUncheckedCreateWithoutTransactionsInput = {
     id?: number
     name: string
     icon?: string | null
-    type: string
+    type: $Enums.TransactionType
   }
 
   export type CategoryCreateOrConnectWithoutTransactionsInput = {
@@ -17428,14 +17625,14 @@ export namespace Prisma {
   export type CategoryUpdateWithoutTransactionsInput = {
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   }
 
   export type CategoryUncheckedUpdateWithoutTransactionsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   }
 
   export type AttachmentUpsertWithWhereUniqueWithoutTransactionInput = {
@@ -17468,7 +17665,7 @@ export namespace Prisma {
   export type WalletCreateWithoutUserInput = {
     id?: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
     transactions?: TransactionCreateNestedManyWithoutWalletInput
   }
@@ -17476,7 +17673,7 @@ export namespace Prisma {
   export type WalletUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
   }
@@ -17540,14 +17737,14 @@ export namespace Prisma {
 
   export type OtpCreateWithoutUserInput = {
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
   }
 
   export type OtpUncheckedCreateWithoutUserInput = {
     id?: number
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
   }
 
@@ -17709,7 +17906,7 @@ export namespace Prisma {
     id?: IntFilter<"Otp"> | number
     user_id?: StringFilter<"Otp"> | string
     code?: StringFilter<"Otp"> | string
-    type?: StringFilter<"Otp"> | string
+    type?: EnumOtpTypeFilter<"Otp"> | $Enums.OtpType
     expired_at?: DateTimeFilter<"Otp"> | Date | string
   }
 
@@ -17771,7 +17968,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     budgets?: BudgetCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
@@ -17785,7 +17982,7 @@ export namespace Prisma {
     full_name: string
     email: string
     password: string
-    role?: string | null
+    role?: $Enums.UserRole
     created_at?: Date | string
     budgets?: BudgetUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -17803,7 +18000,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     category: CategoryCreateNestedOneWithoutTransactionsInput
@@ -17815,7 +18012,7 @@ export namespace Prisma {
     user_id: string
     category_id: number
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutTransactionInput
@@ -17847,7 +18044,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     budgets?: BudgetUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
@@ -17861,7 +18058,7 @@ export namespace Prisma {
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     budgets?: BudgetUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -17891,7 +18088,7 @@ export namespace Prisma {
     user_id: string
     wallet_id: string
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
   }
@@ -17900,7 +18097,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
@@ -17912,7 +18109,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     wallet_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutTransactionNestedInput
@@ -17923,7 +18120,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     wallet_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17959,7 +18156,7 @@ export namespace Prisma {
   export type WalletCreateManyUserInput = {
     id?: string
     name: string
-    balance: Decimal | DecimalJsLike | number | string
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string
   }
 
@@ -17980,7 +18177,7 @@ export namespace Prisma {
   export type OtpCreateManyUserInput = {
     id?: number
     code: string
-    type: string
+    type: $Enums.OtpType
     expired_at: Date | string
   }
 
@@ -18063,21 +18260,21 @@ export namespace Prisma {
 
   export type OtpUpdateWithoutUserInput = {
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OtpUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OtpUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumOtpTypeFieldUpdateOperationsInput | $Enums.OtpType
     expired_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -18123,7 +18320,7 @@ export namespace Prisma {
     user_id: string
     category_id: number
     amount: Decimal | DecimalJsLike | number | string
-    type: string
+    type: $Enums.TransactionType
     note?: string | null
     transaction_date: Date | string
   }
@@ -18132,7 +18329,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutTransactionsNestedInput
@@ -18144,7 +18341,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutTransactionNestedInput
@@ -18155,7 +18352,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     note?: NullableStringFieldUpdateOperationsInput | string | null
     transaction_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
