@@ -9,8 +9,8 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
-  // Gunakan arrow function agar tidak perlu bind(this) di router
   register = asyncHandler(async (req: Request, res: Response) => {
+    // Controller cuma melempar body ke service
     const newUser = await this.authService.registerUser(req.body);
 
     res.status(201).json({
@@ -20,17 +20,14 @@ export class AuthController {
     });
   });
 
-
   login = asyncHandler(async (req: Request, res: Response) => {
-    const loginData = await this.authService.loginUser(req.body);
+    // Controller terima data matang (token + user) dari service
+    const loginResult = await this.authService.loginUser(req.body);
 
-    // Response Format Standard
     res.status(200).json({
       success: true,
       message: "Operation success",
-      data: loginData
+      data: loginResult 
     });
   });
-
-
 }
