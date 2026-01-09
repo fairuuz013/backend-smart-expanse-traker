@@ -1,9 +1,5 @@
-// 1. Import prisma instance dari database.ts kamu
 import prisma from '../database';
-
-// 2. Import Enum & Tipe dari Prisma Client untuk validasi data
 import { TransactionType, UserRole, OtpType } from '@prisma/client';
-
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
 
@@ -13,9 +9,11 @@ class DatabaseSeeder {
   }
 
   public async run() {
-    console.log("🚀 Memulai proses seeding (via src/database.ts)...");
+    console.log("🚀 Memulai proses seeding...");
 
+    // ==========================================
     // 1. CLEANUP (Hapus data lama)
+    // ==========================================
     try {
       // Hapus tabel child dulu baru parent (Reverse Order)
       await prisma.attachment.deleteMany();
@@ -27,16 +25,23 @@ class DatabaseSeeder {
       await prisma.refreshToken.deleteMany();
       await prisma.passwordReset.deleteMany();
       await prisma.wallet.deleteMany();
+      
+      // PERUBAHAN 1: Hapus Profile dulu sebelum User
+      await prisma.profile.deleteMany(); 
       await prisma.user.deleteMany();
-      await prisma.category.deleteMany();
+      
+      await prisma.category.deleteMany(); // Hapus kategori
       console.log("🧹 Database berhasil dibersihkan.");
     } catch (error) {
-      console.log("⚠️  Gagal membersihkan database, lanjut seeding...");
+      console.log("⚠️  Gagal membersihkan database (mungkin tabel kosong), lanjut seeding...");
     }
 
     const password = await this.hashPassword("password123");
 
-    // 2. SEED CATEGORIES (Pakai Enum TransactionType)
+    // ==========================================
+    // 2. SEED GLOBAL CATEGORIES
+    // ==========================================
+    // Karena user_id di Category nullable (?), kita bisa buat tanpa user_id
     console.log("🌱 Seeding Categories...");
     const catGaji = await prisma.category.create({ data: { name: 'Gaji', type: TransactionType.INCOME } });
     const catBonus = await prisma.category.create({ data: { name: 'Bonus', type: TransactionType.INCOME } });
@@ -45,17 +50,38 @@ class DatabaseSeeder {
     const catTransport = await prisma.category.create({ data: { name: 'Transportasi', type: TransactionType.EXPENSE } });
     const catBelanja = await prisma.category.create({ data: { name: 'Belanja', type: TransactionType.EXPENSE } });
 
-    // 3. SEED USERS & RELATIONS
-    console.log("🌱 Seeding Users, Wallets, & Data Lainnya...");
+    // ==========================================
+    // 3. SEED USERS, PROFILES & RELATIONS
+    // ==========================================
+    console.log("🌱 Seeding Users, Profiles, Wallets & Data Lainnya...");
 
     for (let i = 0; i < 5; i++) {
-      // --- A. Create USER ---
+      // --- A. Create USER + PROFILE (Nested Write) ---
+      // PERUBAHAN 2: Menambahkan data Profile di sini
+      const firstName = faker.person.firstName();
+      const lastName = faker.person.lastName();
+      const username = `${firstName.toLowerCase()}${faker.string.numeric(3)}`; // Username unik
+
       const user = await prisma.user.create({
         data: {
-          full_name: faker.person.fullName(),
-          email: faker.internet.email(),
+          full_name: `${firstName} ${lastName}`,
+          email: faker.internet.email({ firstName, lastName }),
           password: password,
           role: i === 0 ? UserRole.ADMIN : UserRole.USER,
+          
+          // INI LOGIKA BARU UNTUK PROFILE:
+          profile: {
+            create: {
+              username: username,
+              address: faker.location.streetAddress(),
+              occupation: faker.person.jobTitle(),
+              // Menggunakan mode 'age' agar umur logis (18-60 tahun)
+              date_of_birth: faker.date.birthdate({ min: 18, max: 60, mode: 'age' })
+            }
+          }
+        },
+        include: {
+          profile: true // Include profile agar kita bisa lihat log-nya kalau perlu
         }
       });
 
@@ -85,7 +111,7 @@ class DatabaseSeeder {
         }
       });
 
-      // --- E. Create OTP (Pakai OtpType.REGISTRATION) ---
+      // --- E. Create OTP ---
       await prisma.otp.create({
         data: {
           code: faker.string.numeric(6),
@@ -101,13 +127,13 @@ class DatabaseSeeder {
           {
             user_id: user.id,
             title: "Selamat Datang!",
-            content: "Akun Smart Expense Tracker Anda aktif.",
+            content: `Halo ${username}, selamat bergabung di Smart Expense Tracker!`,
             is_read: true
           },
           {
             user_id: user.id,
             title: "Info",
-            content: "Cek laporan keuangan bulanan Anda.",
+            content: "Lengkapi data profil Anda untuk pengalaman lebih baik.",
             is_read: false
           }
         ]
@@ -127,16 +153,15 @@ class DatabaseSeeder {
       await prisma.activityLog.create({
         data: {
           user_id: user.id,
-          action: "LOGIN",
-          description: "Login berhasil via Web"
+          action: "REGISTER",
+          description: "User berhasil mendaftar"
         }
       });
 
-      // --- I. Create TRANSACTIONS & ATTACHMENT ---
-      
-    await prisma.transaction.createMany({
+      // --- I. Create TRANSACTIONS ---
+      // Kita gunakan Kategori Global yang dibuat di atas (catMakan, catTransport, dll)
+      await prisma.transaction.createMany({
         data: [
-          // Transaksi 1: Makan (Expense)
           {
             amount: 25000,
             note: "Makan Siang Warteg",
@@ -146,27 +171,24 @@ class DatabaseSeeder {
             wallet_id: walletCash.id,
             category_id: catMakan.id
           },
-          // Transaksi 2: Transportasi (PAKAI catTransport DISINI) ✅
           {
             amount: 15000,
             note: "Ojek Online ke Kantor",
             type: TransactionType.EXPENSE,
-            transaction_date: faker.date.recent(), // Transaksi baru-baru ini
+            transaction_date: faker.date.recent(),
             user_id: user.id,
-            wallet_id: walletCash.id, // Bayar pakai tunai
-            category_id: catTransport.id // <-- Variabel catTransport terpakai!
+            wallet_id: walletCash.id,
+            category_id: catTransport.id
           },
-          // Transaksi 3: Belanja (PAKAI catBelanja DISINI) ✅
           {
             amount: 750000,
             note: "Belanja Bulanan Superindo",
             type: TransactionType.EXPENSE,
-            transaction_date: faker.date.past(), // Transaksi bulan lalu
+            transaction_date: faker.date.past(),
             user_id: user.id,
-            wallet_id: walletBank.id, // Bayar transfer bank
-            category_id: catBelanja.id // <-- Variabel catBelanja terpakai!
+            wallet_id: walletBank.id,
+            category_id: catBelanja.id
           },
-          // Transaksi 4: Gaji (Income)
           {
             amount: 8000000,
             note: "Gaji Pokok",
@@ -176,7 +198,6 @@ class DatabaseSeeder {
             wallet_id: walletBank.id,
             category_id: catGaji.id
           },
-          // Transaksi 5: Bonus (Income)
           {
             amount: 1500000,
             note: "Bonus Lembur",
@@ -189,9 +210,7 @@ class DatabaseSeeder {
         ]
       });
 
-      // --- J. Attachment (Opsional untuk salah satu transaksi saja) ---
-      // Karena createMany tidak mengembalikan ID satu per satu, 
-      // kita query satu transaksi terakhir buat ditempel struk
+      // --- J. Attachment (Struk untuk transaksi terakhir) ---
       const lastTrx = await prisma.transaction.findFirst({
         where: { user_id: user.id },
         orderBy: { transaction_date: 'desc' }
@@ -201,25 +220,22 @@ class DatabaseSeeder {
         await prisma.attachment.create({
           data: {
             transaction_id: lastTrx.id,
-            file_path: "uploads/struk-belanja.jpg",
+            file_path: "uploads/struk-dummy.jpg",
             file_type: "image/jpeg"
           }
         });
       }
     }
 
-    console.log("🌳 SEEDING SELESAI! Data dummy siap digunakan.");
+    console.log("🌳 SEEDING SELESAI! Data dummy (termasuk Profile) siap digunakan.");
   }
 }
 
-// Jalankan Seeder
 new DatabaseSeeder().run()
   .catch(e => {
     console.error("❌ Error Seed:", e);
     process.exit(1);
   })
   .finally(async () => {
-    // Tidak perlu prisma.$disconnect() manual karena import dari singleton database.ts
-    // Tapi jika ingin force close:
     await prisma.$disconnect();
   });

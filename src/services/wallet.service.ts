@@ -1,10 +1,10 @@
 import { WalletRepository } from '../repositories/wallet.repository';
-
+import prisma from '../database'; // <--- Import singleton prisma di sini
 export class WalletService { 
     private walletRepo: WalletRepository;
 
     constructor() {
-        this.walletRepo = new WalletRepository();
+        this.walletRepo = new WalletRepository(prisma);
     }
 
     async getWallets(userId: string) {

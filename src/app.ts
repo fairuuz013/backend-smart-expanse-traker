@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';     // Dari HEAD (saya benerin typonya // jadi /)
 import walletRoutes from './routes/wallet.routes'; // Dari fitur-wallet
+import categoryRoutes from './routes/category.routes'; // <--- Import ini
 import { ErrorHandler } from './middlewares/error.handler';
 
 const app: Application = express();
@@ -15,6 +16,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);     // Route User masuk
 app.use('/api/wallets', walletRoutes); // Route Wallet masuk
+app.use('/api/v1/categories', categoryRoutes); // <--- Pasang di sini
 
 app.get('/', (_req: Request, res: Response) => {
     res.status(200).json({

@@ -147,7 +147,10 @@ exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   icon: 'icon',
-  type: 'type'
+  type: 'type',
+  created_at: 'created_at',
+  deleted_at: 'deleted_at',
+  user_id: 'user_id'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
