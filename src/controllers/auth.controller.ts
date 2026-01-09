@@ -21,13 +21,25 @@ export class AuthController {
   });
 
   login = asyncHandler(async (req: Request, res: Response) => {
-    // Controller terima data matang (token + user) dari service
+    // Kita pakai versi HEAD (loginResult & Operation success)
     const loginResult = await this.authService.loginUser(req.body);
 
     res.status(200).json({
       success: true,
       message: "Operation success",
       data: loginResult 
+    });
+  });
+
+  // --- AMBIL INI DARI BRANCH fitur-wallet ---
+  me = asyncHandler(async (req: Request, res: Response) => {
+    // req.user otomatis terisi dari AuthMiddleware
+    // Karena pakai asyncHandler, tidak perlu try-catch
+    
+    res.status(200).json({
+      success: true,
+      message: "Operation success",
+      data: req.user 
     });
   });
 }

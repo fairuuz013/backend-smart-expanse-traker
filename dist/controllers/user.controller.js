@@ -1,21 +1,18 @@
 import { UserService } from "../services/user.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 export class UserController {
-    userService = new UserService();
+    userService;
     constructor() {
         this.userService = new UserService();
     }
     updateProfile = asyncHandler(async (req, res) => {
-        const userId = req.user?.id;
-        if (!userId) {
-            throw new Error("Unauthorized: User ID not found");
-        }
-        const { fullName } = req.body;
-        const updateUser = await this.userService.updateProfile(userId, { fullName });
+        // Langsung lempar req.user.id dan req.body ke Service.
+        // Tanda seru (!) artinya kita yakin req.user ADA (dijamin middleware).
+        const updatedUser = await this.userService.updateProfile(req.user.id, req.body);
         res.status(200).json({
             success: true,
-            massage: "Oprasion success",
-            data: updateUser
+            message: "Operation success",
+            data: updatedUser
         });
     });
 }

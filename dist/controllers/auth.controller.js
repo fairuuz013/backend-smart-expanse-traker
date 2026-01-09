@@ -5,8 +5,8 @@ export class AuthController {
     constructor() {
         this.authService = new AuthService();
     }
-    // Gunakan arrow function agar tidak perlu bind(this) di router
     register = asyncHandler(async (req, res) => {
+        // Controller cuma melempar body ke service
         const newUser = await this.authService.registerUser(req.body);
         res.status(201).json({
             success: true,
@@ -15,12 +15,22 @@ export class AuthController {
         });
     });
     login = asyncHandler(async (req, res) => {
-        const loginData = await this.authService.loginUser(req.body);
-        // Response Format Standard
+        // Kita pakai versi HEAD (loginResult & Operation success)
+        const loginResult = await this.authService.loginUser(req.body);
         res.status(200).json({
             success: true,
             message: "Operation success",
-            data: loginData
+            data: loginResult
+        });
+    });
+    // --- AMBIL INI DARI BRANCH fitur-wallet ---
+    me = asyncHandler(async (req, res) => {
+        // req.user otomatis terisi dari AuthMiddleware
+        // Karena pakai asyncHandler, tidak perlu try-catch
+        res.status(200).json({
+            success: true,
+            message: "Operation success",
+            data: req.user
         });
     });
 }
