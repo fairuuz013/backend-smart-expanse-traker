@@ -39,7 +39,7 @@ export class WalletController {
 
   public update = asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user?.id;
-    if (userId) throw new Error("Unatuhorized");
+    if (!userId) throw new Error("Unatuhorized");
 
     const { id } = req.params;
 

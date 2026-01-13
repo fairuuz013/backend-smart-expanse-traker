@@ -47,4 +47,4 @@ export class AuthController {
       data: user 
     });
   });
-}
+} 

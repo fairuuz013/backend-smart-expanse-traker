@@ -197,10 +197,14 @@ exports.Prisma.TransactionScalarFieldEnum = {
   user_id: 'user_id',
   category_id: 'category_id',
   wallet_id: 'wallet_id',
+  name: 'name',
   amount: 'amount',
   type: 'type',
   note: 'note',
-  transaction_date: 'transaction_date'
+  transaction_date: 'transaction_date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

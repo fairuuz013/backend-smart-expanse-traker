@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { CategoryService } from "../services/category.service";
 import { asyncHandler } from "../utils/asyncHandler";
 
+
 export class CategoryController {
     private categotyService: CategoryService;
 
@@ -9,23 +10,28 @@ export class CategoryController {
         this.categotyService = new CategoryService();
     }
 
-    public index = asyncHandler(async (req: Request, res: Response) => {
+    public getAll = asyncHandler(async (req: Request, res: Response) =>{
         const userId = req.user?.id;
         if(!userId) throw new Error("Unauthorized");
 
-        const categories = await this.categotyService.getCategories(userId);
+
+        const { type } = req.query;
+
+        const categories = await this.categotyService.getCatagories(
+            userId,
+            type as string | undefined
+        );
 
         res.status(200).json({
             success: true,
-            message: "Operation success",
+            message: "Operation",
             data: categories
-        });
-    });
-
+        })
+    })
 
     public create = asyncHandler(async (req: Request, res: Response) => {
         const userId = req.user?.id;
-        if(!userId) throw new Error("Unauthorized");
+        if (!userId) throw new Error("Unauthorized");
 
         const newCategory = await this.categotyService.createCategory(userId, req.body);
 
@@ -34,5 +40,5 @@ export class CategoryController {
             message: "Opration success",
             data: newCategory
         })
-    } )
+    })
 }
