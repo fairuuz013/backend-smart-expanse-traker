@@ -52,8 +52,16 @@ export class TransactionService {
     }
 
 
-    async getTransactions(userId: string, month?: number, year?: number, type?: string, search?: string) {
-        const now = new Date()
+ async getTransactions(
+        userId: string, 
+        month?: number, 
+        year?: number, 
+        type?: string, 
+        search?: string,
+        page: number = 1,   // Default page 1
+        limit: number = 10  // Default limit 10
+    ) {
+        const now = new Date();
         const targetMonth = month ? month - 1 : now.getMonth();
         const targetYear = year || now.getFullYear();
 
@@ -64,12 +72,26 @@ export class TransactionService {
         if (type === 'INCOME') typeEnum = TransactionType.INCOME;
         else if (type === 'EXPENSE') typeEnum = TransactionType.EXPENSE;
 
-        return await this.transactionRepo.findAll(userId, {
+        // Panggil Repository dengan format baru
+        const { data, total } = await this.transactionRepo.findAll(userId, {
             startDate,
             endDate,
-            ...(search && { search }),
-            ...(typeEnum && { type: typeEnum })
+            search,
+            type: typeEnum,
+            page,
+            limit
         });
+
+        // Format Return agar Frontend senang
+        return {
+            data: data,
+            meta: {
+                page: page,
+                limit: limit,
+                total_items: total,
+                total_pages: Math.ceil(total / limit)
+            }
+        };
     }
 
 
