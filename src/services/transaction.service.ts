@@ -52,14 +52,14 @@ export class TransactionService {
     }
 
 
- async getTransactions(
-        userId: string, 
-        month?: number, 
-        year?: number, 
-        type?: string, 
+    async getTransactions(
+        userId: string,
+        month?: number,
+        year?: number,
+        type?: string,
         search?: string,
-        page: number = 1,   // Default page 1
-        limit: number = 10  // Default limit 10
+        page: number = 1,
+        limit: number = 10
     ) {
         const now = new Date();
         const targetMonth = month ? month - 1 : now.getMonth();
@@ -72,7 +72,6 @@ export class TransactionService {
         if (type === 'INCOME') typeEnum = TransactionType.INCOME;
         else if (type === 'EXPENSE') typeEnum = TransactionType.EXPENSE;
 
-        // Panggil Repository dengan format baru
         const { data, total } = await this.transactionRepo.findAll(userId, {
             startDate,
             endDate,
@@ -82,7 +81,6 @@ export class TransactionService {
             limit
         });
 
-        // Format Return agar Frontend senang
         return {
             data: data,
             meta: {
@@ -118,12 +116,10 @@ export class TransactionService {
             const wallet = await this.walletRepo.findById(oldTransaction.wallet_id)
             if (!wallet) throw new Error("Wallet tidak dimukan");
 
-            // A. REVERT (Kembalikan saldo lama)
             let currentBalance = Number(wallet.balance);
             if (oldTransaction.type === 'INCOME') currentBalance -= Number(oldTransaction.amount);
             else currentBalance += Number(oldTransaction.amount)
 
-            // B. APPLY (Terapkan data baru)
             const newAmount = data.amount !== undefined ? data.amount : Number(oldTransaction.amount);
             const newType = data.type !== undefined ? data.type : oldTransaction.type;
             if (newType === 'INCOME') currentBalance += newAmount;
@@ -176,7 +172,7 @@ export class TransactionService {
                 where: { id: wallet.id },
                 data: { balance: reverseBalance }
             });
-            return { message: "Transaksi berasil di hapus dan saldo dikembalikan"}
-        }); 
-      }
+            return { message: "Transaksi berasil di hapus dan saldo dikembalikan" }
+        });
+    }
 }
