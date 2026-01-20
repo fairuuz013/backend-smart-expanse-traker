@@ -8,8 +8,10 @@ const budgetController = new BudgetController();
 
 const authMiddleware = new AuthMiddleware()
 
-router.get('/', authMiddleware.handle, budgetController.getBudget);
+router.get("/", authMiddleware.handle, budgetController.getBudget);
 
-router.post('/', authMiddleware.handle, budgetController.setBudget);
+router.post("/", authMiddleware.handle, budgetController.setBudget);
+
+ 
 
 export default router;

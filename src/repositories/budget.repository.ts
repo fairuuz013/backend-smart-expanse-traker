@@ -1,23 +1,18 @@
-import { PrismaClient, Budget } from '../generated';
+import { PrismaClient, Budget } from '../generated'; 
 
 export class BudgetRepository {
-    private prisma = new PrismaClient();
+    private prisma: PrismaClient;
 
-    constructor(prisma: PrismaClient) {
-        this.prisma = prisma;
+
+    constructor(prismaClient: PrismaClient) {
+        this.prisma = prismaClient;
     }
 
     async upsertBudget(userId: string, amount: number, date: Date): Promise<Budget> {
-
         const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-
         const existingBudget = await this.prisma.budget.findFirst({
-            where: {
-                user_id: userId,
-                month_year: startOfMonth
-            }
+            where: { user_id: userId, month_year: startOfMonth }
         });
-
 
         if (existingBudget) {
             return this.prisma.budget.update({
@@ -35,14 +30,10 @@ export class BudgetRepository {
         }
     }
 
-    async findByMonth(useId: string, date: Date): Promise<Budget | null> {
-        const startOfMonth = new Date(date.getUTCFullYear(), date.getMonth(), 1)
-
+    async findByMonth(userId: string, date: Date): Promise<Budget | null> {
+        const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         return this.prisma.budget.findFirst({
-            where: { 
-                user_id: useId,
-                month_year: startOfMonth
-            }
+            where: { user_id: userId, month_year: startOfMonth }
         });
     }
 }

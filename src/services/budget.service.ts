@@ -12,12 +12,7 @@ export class BudgetService {
         if (amount < 0) throw new Error("Budget tidak boleh negatif");
 
         const today = new Date();
-        return await this.budgetRepo.upsertBudget(userId, amount, today);
-
-        // 1. ambil budget dari userId dan amount yang dari generated 
-        // 2. jika amont kurang dari 0 maka akan menteriger new error 
-        // 3. baut varibel buat menampung data date dari untuk bisa  dilihat dibuat nya kapann
-        // 4. mengembalikan hasil data yang sudah di ambil dan kan di teruskan ke controller unutk hasil response suscces nya 
+        return await this.budgetRepo.upsertBudget(userId, amount, today);   
     }
 
     async getCurrentBudget(useId: string) {

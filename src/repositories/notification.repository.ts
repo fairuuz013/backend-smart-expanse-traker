@@ -3,8 +3,9 @@ import { PrismaClient } from '../generated'; // Sesuaikan path ini
 export class NotificationRepository {
   private prisma: PrismaClient;
 
-  constructor() {
-    this.prisma = new PrismaClient();
+  constructor(prisma: PrismaClient) {
+    this.prisma =  prisma;
+ 
   }
 
   async create(data: { userId: string; title: string; content: string }) {

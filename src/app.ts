@@ -39,8 +39,8 @@ app.use('/api/wallets', walletRoutes);
 app.use('/api/categories', categoryRoutes); 
 app.use('/api/transactions', transactionRoutes); 
 app.use("/api/dashboard", dashboardRoutes);
-app.use('/budget', budgetRoutes);
-app.use('/notifications', notificationRoutes);
+app.use('/api/budget', budgetRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/', (_req: Request, res: Response) => {
     res.status(200).json({
