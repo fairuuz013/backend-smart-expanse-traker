@@ -1,47 +1,44 @@
-// 1. Ubah import dari 'database' ke 'generated'
-import { PrismaClient } from '../generated';
 export class WalletRepository {
     prisma;
-    // 2. Gunakan Constructor Injection
-    // (PrismaClient dikirim dari luar, bukan import langsung di sini)
     constructor(prisma) {
         this.prisma = prisma;
     }
     async findAll(userId) {
-        // 3. Pakai 'this.prisma' bukan 'prisma' global
+        // ... code sama
         return await this.prisma.wallet.findMany({
-            where: {
-                user_id: userId,
-                deleted_at: null
-            },
+            where: { user_id: userId, deleted_at: null },
             orderBy: { created_at: 'desc' }
         });
     }
     async findById(id) {
+        // ... code sama
         return await this.prisma.wallet.findFirst({
-            where: {
-                id,
-                deleted_at: null
+            where: { id, deleted_at: null }
+        });
+    }
+    // Parameter 'type' di sini WAJIB WalletType (Enum), bukan string
+    async create(data) {
+        return await this.prisma.wallet.create({
+            data: {
+                name: data.name,
+                type: data.type, // Prisma akan senang menerima ini
+                balance: data.balance,
+                user_id: data.user_id
             }
         });
     }
-    async create(data) {
-        return await this.prisma.wallet.create({
-            data
-        });
-    }
+    // Parameter 'type' di sini juga WAJIB WalletType
     async update(id, data) {
         return await this.prisma.wallet.update({
             where: { id },
-            data
+            data // Object data sudah sesuai struktur Prisma Update Input
         });
     }
     async delete(id) {
+        // ... code sama
         return await this.prisma.wallet.update({
             where: { id },
-            data: {
-                deleted_at: new Date()
-            }
+            data: { deleted_at: new Date() }
         });
     }
 }

@@ -13,18 +13,18 @@ export declare const createTransactionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     name: string;
     type: "INCOME" | "EXPENSE";
-    category_id: number;
-    wallet_id: string;
     amount: number;
     transaction_date: string;
+    category_id: number;
+    wallet_id: string;
     note?: string | undefined;
 }, {
     name: string;
     type: "INCOME" | "EXPENSE";
-    category_id: number;
-    wallet_id: string;
     amount: number;
     transaction_date: string;
+    category_id: number;
+    wallet_id: string;
     note?: string | undefined;
 }>;
 export declare const updateTransactionSchema: z.ZodObject<{
@@ -41,19 +41,19 @@ export declare const updateTransactionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     name?: string | undefined;
     type?: "INCOME" | "EXPENSE" | undefined;
-    category_id?: number | undefined;
-    wallet_id?: string | undefined;
     amount?: number | undefined;
     note?: string | undefined;
     transaction_date?: string | undefined;
+    category_id?: number | undefined;
+    wallet_id?: string | undefined;
 }, {
     name?: string | undefined;
     type?: "INCOME" | "EXPENSE" | undefined;
-    category_id?: number | undefined;
-    wallet_id?: string | undefined;
     amount?: number | undefined;
     note?: string | undefined;
     transaction_date?: string | undefined;
+    category_id?: number | undefined;
+    wallet_id?: string | undefined;
 }>;
 export declare const queryTransactionSchema: z.ZodObject<{
     month: z.ZodOptional<z.ZodNumber>;
@@ -63,16 +63,22 @@ export declare const queryTransactionSchema: z.ZodObject<{
         INCOME: "INCOME";
         EXPENSE: "EXPENSE";
     }>>;
+    page: z.ZodOptional<z.ZodNumber>;
+    limit: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    search?: string | undefined;
     type?: "INCOME" | "EXPENSE" | undefined;
+    search?: string | undefined;
+    limit?: number | undefined;
     year?: number | undefined;
     month?: number | undefined;
+    page?: number | undefined;
 }, {
-    search?: string | undefined;
     type?: "INCOME" | "EXPENSE" | undefined;
+    search?: string | undefined;
+    limit?: number | undefined;
     year?: number | undefined;
     month?: number | undefined;
+    page?: number | undefined;
 }>;
 export type CreateTransactionDTO = z.infer<typeof createTransactionSchema>;
 export type UpdateTransactionDTO = z.infer<typeof updateTransactionSchema>;

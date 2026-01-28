@@ -1,29 +1,34 @@
-import { PrismaClient, TransactionType } from '../generated';
+import { PrismaClient, TransactionType, CategoryOption } from '../generated';
 export declare class CategoryRepository {
     private prisma;
     constructor(prisma: PrismaClient);
-    findAll(useId: string, type?: TransactionType): Promise<{
-        name: string;
+    findAll(userId: string, type?: TransactionType): Promise<{
+        created_at: Date;
         id: number;
         user_id: string | null;
-        created_at: Date;
+        name: import("../generated").$Enums.CategoryOption;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        icon: string | null;
     }[]>;
     create(data: {
-        name: string;
-        icon?: string | undefined;
+        name: CategoryOption;
         type: TransactionType;
         user_id: string;
     }): Promise<{
-        name: string;
+        created_at: Date;
         id: number;
         user_id: string | null;
-        created_at: Date;
+        name: import("../generated").$Enums.CategoryOption;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        icon: string | null;
     }>;
+    findById(id: number): Promise<{
+        created_at: Date;
+        id: number;
+        user_id: string | null;
+        name: import("../generated").$Enums.CategoryOption;
+        type: import("../generated").$Enums.TransactionType;
+        deleted_at: Date | null;
+    } | null>;
 }
 //# sourceMappingURL=category.repository.d.ts.map

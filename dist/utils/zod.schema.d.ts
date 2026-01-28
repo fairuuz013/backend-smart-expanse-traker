@@ -4,13 +4,13 @@ export declare const registerSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
 }, "strip", z.ZodTypeAny, {
+    fullName: string;
     email: string;
     password: string;
-    fullName: string;
 }, {
+    fullName: string;
     email: string;
     password: string;
-    fullName: string;
 }>;
 export declare const loginSchema: z.ZodObject<{
     email: z.ZodString;
@@ -28,11 +28,11 @@ export declare const walletSchema: z.ZodObject<{
     type: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     name: string;
-    balance: number;
     type: string;
+    balance: number;
 }, {
     name: string;
-    balance: number;
     type: string;
+    balance: number;
 }>;
 //# sourceMappingURL=zod.schema.d.ts.map

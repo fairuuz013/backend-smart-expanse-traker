@@ -1,59 +1,59 @@
-import { PrismaClient } from '../generated';
+import { PrismaClient, WalletType } from '../generated';
 export declare class WalletRepository {
     private prisma;
     constructor(prisma: PrismaClient);
     findAll(userId: string): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }[]>;
     findById(id: string): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     } | null>;
     create(data: {
         name: string;
-        type: string;
+        type: WalletType;
         balance: number;
         user_id: string;
     }): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
     update(id: string, data: {
         name?: string;
-        type?: string;
+        type?: WalletType;
         balance?: number;
     }): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
     delete(id: string): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
 }

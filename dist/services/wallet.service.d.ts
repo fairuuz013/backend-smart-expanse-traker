@@ -2,12 +2,12 @@ export declare class WalletService {
     private walletRepo;
     constructor();
     getWallets(userId: string): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }[]>;
     createWallet(userId: string, data: {
@@ -15,30 +15,34 @@ export declare class WalletService {
         type: string;
         balance: number;
     }): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
-    updateWallet(userId: string, walletId: string, data: any): Promise<{
-        name: string;
+    updateWallet(userId: string, walletId: string, data: {
+        name?: string;
+        type?: string;
+        balance?: number;
+    }): Promise<{
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
     deleteWallet(userId: string, walletId: string): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
+        type: import("../generated").$Enums.WalletType;
         balance: import("@prisma/client-runtime-utils").Decimal;
-        type: string;
         deleted_at: Date | null;
     }>;
 }

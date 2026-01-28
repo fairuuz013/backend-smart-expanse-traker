@@ -1,119 +1,165 @@
 import { PrismaClient, Prisma, TransactionType } from "../generated";
+export interface TransactionFindAllOptions {
+    startDate: Date;
+    endDate: Date;
+    type?: TransactionType | undefined;
+    search?: string | undefined;
+    page: number;
+    limit: number;
+}
 export declare class TransactionRepository {
     private prisma;
     constructor(prisma: PrismaClient);
     create(data: Prisma.TransactionCreateInput, tx?: Prisma.TransactionClient): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: Prisma.Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
-    findAll(userId: string, filters: {
-        startDate: Date;
-        endDate: Date;
-        type?: TransactionType;
-        search?: string;
-    }): Promise<({
-        wallet: {
-            name: string;
+    findAll(userId: string, filters: TransactionFindAllOptions): Promise<{
+        data: ({
+            wallet: {
+                id: string;
+                name: string;
+            };
+            category: {
+                id: number;
+                name: import("../generated").$Enums.CategoryOption;
+                type: import("../generated").$Enums.TransactionType;
+            };
+            attachments: {
+                created_at: Date;
+                id: string;
+                transaction_id: string;
+                file_path: string;
+                file_type: string;
+            }[];
+        } & {
+            created_at: Date;
             id: string;
             user_id: string;
-            created_at: Date;
-            balance: Prisma.Decimal;
-            type: string;
-            deleted_at: Date | null;
-        };
-        category: {
             name: string;
-            id: number;
-            user_id: string | null;
-            created_at: Date;
             type: import("../generated").$Enums.TransactionType;
             deleted_at: Date | null;
-            icon: string | null;
-        };
-    } & {
-        name: string;
-        id: string;
-        user_id: string;
-        created_at: Date;
-        type: import("../generated").$Enums.TransactionType;
-        deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
-        amount: Prisma.Decimal;
-        note: string | null;
-        transaction_date: Date;
-        updated_at: Date;
-    })[]>;
+            amount: Prisma.Decimal;
+            note: string | null;
+            transaction_date: Date;
+            updated_at: Date;
+            category_id: number;
+            wallet_id: string;
+        })[];
+        total: number;
+    }>;
     findById(id: string): Promise<({
         wallet: {
-            name: string;
+            created_at: Date;
             id: string;
             user_id: string;
-            created_at: Date;
+            name: string;
+            type: import("../generated").$Enums.WalletType;
             balance: Prisma.Decimal;
-            type: string;
             deleted_at: Date | null;
         };
         category: {
-            name: string;
+            created_at: Date;
             id: number;
             user_id: string | null;
-            created_at: Date;
+            name: import("../generated").$Enums.CategoryOption;
             type: import("../generated").$Enums.TransactionType;
             deleted_at: Date | null;
-            icon: string | null;
         };
     } & {
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: Prisma.Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }) | null>;
     update(id: string, data: Prisma.TransactionUpdateInput, tx?: Prisma.TransactionClient): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: Prisma.Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
     delete(id: string, tx?: Prisma.TransactionClient): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: Prisma.Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
+    getSummaryStats(userId: string, startDate: Date, endDate: Date): Promise<(Prisma.PickEnumerable<Prisma.TransactionGroupByOutputType, "type"[]> & {
+        _sum: {
+            amount: Prisma.Decimal | null;
+        };
+    })[]>;
+    getDailyTransactions(useId: string, startDate: Date, endDate: Date): Promise<{
+        type: import("../generated").$Enums.TransactionType;
+        amount: Prisma.Decimal;
+        transaction_date: Date;
+    }[]>;
+    getMonthlyAggregates(userId: string, startDate: Date, endDate: Date): Promise<{
+        totalIncome: number;
+        totalExpense: number;
+    }>;
+    getTopExpenses(userId: string, startDate: Date, endDate: Date, limit?: number): Promise<(Prisma.PickEnumerable<Prisma.TransactionGroupByOutputType, "category_id"[]> & {
+        _sum: {
+            amount: Prisma.Decimal | null;
+        };
+    })[]>;
+    sumExpenseByMonth(userId: string, startDate: Date, endDate: Date): Promise<number>;
+    findRecent(useId: string, limit: number): Promise<({
+        category: {
+            created_at: Date;
+            id: number;
+            user_id: string | null;
+            name: import("../generated").$Enums.CategoryOption;
+            type: import("../generated").$Enums.TransactionType;
+            deleted_at: Date | null;
+        };
+    } & {
+        created_at: Date;
+        id: string;
+        user_id: string;
+        name: string;
+        type: import("../generated").$Enums.TransactionType;
+        deleted_at: Date | null;
+        amount: Prisma.Decimal;
+        note: string | null;
+        transaction_date: Date;
+        updated_at: Date;
+        category_id: number;
+        wallet_id: string;
+    })[]>;
 }
 //# sourceMappingURL=transaction.repository.d.ts.map

@@ -1,5 +1,8 @@
+// services/wallet.service.ts
 import { WalletRepository } from "../repositories/wallet.repository.js";
-import prisma from "../database.js"; // <--- Import singleton prisma di sini
+import prisma from "../database.js";
+// 👇 1. Import Enum dari generated prisma
+import { WalletType } from "../generated";
 export class WalletService {
     walletRepo;
     constructor() {
@@ -8,32 +11,53 @@ export class WalletService {
     async getWallets(userId) {
         return await this.walletRepo.findAll(userId);
     }
+    // 👇 2. Terima 'type' sebagai string biasa dari Controller
     async createWallet(userId, data) {
+        // --- VALIDASI MANUAL START ---
+        // Kita cek: Apakah string yang dikirim user ada di dalam daftar WalletType?
+        const isValidType = Object.values(WalletType).includes(data.type);
+        if (!isValidType) {
+            // Jika tidak cocok, lempar error
+            throw new Error(`Tipe wallet '${data.type}' tidak valid. Pilihan: ${Object.values(WalletType).join(", ")}`);
+        }
+        // --- VALIDASI MANUAL END ---
+        // 3. Casting: Karena sudah valid, kita paksa (cast) jadi tipe WalletType
+        const typeEnum = data.type;
         return await this.walletRepo.create({
-            ...data,
+            name: data.name,
+            balance: data.balance,
+            type: typeEnum, // Repository menerima Enum, bukan string
             user_id: userId
         });
     }
-    // Kita pakai 'any' di sini supaya tidak ribet, tapi tetap validasi logic kepemilikan
     async updateWallet(userId, walletId, data) {
         const wallet = await this.walletRepo.findById(walletId);
-        // Validasi: Kalau wallet gak ada ATAU bukan punya user yang login -> Error
         if (!wallet || wallet.user_id !== userId) {
             const error = new Error("Wallet tidak ditemukan atau akses dilarang");
-            error.status = 404; // Set 404 Not Found
+            error.status = 404;
             throw error;
         }
-        // Kita filter sedikit agar user tidak sembarang update ID
-        return await this.walletRepo.update(walletId, {
+        const updateData = {
             name: data.name,
-            type: data.type,
             balance: data.balance
-        });
+        };
+        // --- VALIDASI UPDATE ---
+        // Cek jika user mengirim field 'type' untuk diupdate
+        if (data.type) {
+            const isValidType = Object.values(WalletType).includes(data.type);
+            if (!isValidType) {
+                throw new Error(`Tipe wallet '${data.type}' tidak valid.`);
+            }
+            // Assign sebagai Enum
+            updateData.type = data.type;
+        }
+        return await this.walletRepo.update(walletId, updateData);
     }
     async deleteWallet(userId, walletId) {
+        // ... (sama seperti sebelumnya, tidak ada perubahan karena delete cuma butuh ID)
         const wallet = await this.walletRepo.findById(walletId);
         if (!wallet || wallet.user_id !== userId) {
-            const error = new Error("Wallet tidak ditemukan atau akses dilarang");
+            const error = new Error("Wallet tidak ditemukan");
             error.status = 404;
             throw error;
         }

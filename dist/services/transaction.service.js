@@ -1,20 +1,44 @@
 import { TransactionRepository } from "../repositories/transaction.repository.js";
 import { WalletRepository } from "../repositories/wallet.repository.js";
+import { BudgetRepository } from "../repositories/budget.repository.js"; // <--- TAMBAHAN
+import { NotificationService } from "./notification.service.js"; // <--- TAMBAHAN
+import { CategoryRepository } from "../repositories/category.repository.js";
 import prisma from "../database.js";
-import { TransactionType } from "../generated";
+import { TransactionType, CategoryOption } from "../generated";
 export class TransactionService {
     transactionRepo;
     walletRepo;
+    budgetRepo; // <--- Properti Baru
+    notificationService; // <--- Properti Baru
+    categoryRepo;
     constructor() {
         this.transactionRepo = new TransactionRepository(prisma);
         this.walletRepo = new WalletRepository(prisma);
+        // Inisialisasi dependensi baru
+        this.budgetRepo = new BudgetRepository(prisma);
+        this.notificationService = new NotificationService();
+        this.categoryRepo = new CategoryRepository(prisma);
     }
     async createTransaction(userId, data) {
+        // 1. Cek Wallet
         const wallet = await this.walletRepo.findById(data.wallet_id);
         if (!wallet || wallet.user_id !== userId) {
-            throw new Error("Wallet tidak dimukan atau bukan milik anda");
+            throw new Error("Wallet tidak ditemukan atau bukan milik anda");
         }
-        return await prisma.$transaction(async (tx) => {
+        // 2. [LOGIC BARU] Validasi Kategori "Other"
+        // Kita perlu tahu nama kategori berdasarkan ID yang dikirim
+        const category = await this.categoryRepo.findById(data.category_id);
+        if (!category)
+            throw new Error("Kategori tidak ditemukan");
+        // Cek apakah user memilih OTHER_EXPENSE atau OTHER_INCOME
+        if (category.name === CategoryOption.OTHER_EXPENSE || category.name === CategoryOption.OTHER_INCOME) {
+            // Jika ya, Note WAJIB diisi
+            if (!data.note || data.note.trim() === "") {
+                throw new Error("Untuk kategori 'Lainnya', catatan (note) wajib diisi sebagai keterangan.");
+            }
+        }
+        // 3. Jalankan Transaksi Database
+        const result = await prisma.$transaction(async (tx) => {
             const newTransaction = await this.transactionRepo.create({
                 name: data.name,
                 amount: data.amount,
@@ -22,28 +46,57 @@ export class TransactionService {
                 note: data.note ?? null,
                 transaction_date: new Date(data.transaction_date),
                 user_id: userId,
-                wallet: {
-                    connect: { id: data.wallet_id }
-                },
-                category: {
-                    connect: { id: data.category_id }
-                }
+                wallet: { connect: { id: data.wallet_id } },
+                category: { connect: { id: data.category_id } }
             }, tx);
-            let newBalace = Number(wallet.balance);
+            let newBalance = Number(wallet.balance);
             if (data.type === "INCOME") {
-                newBalace += data.amount;
+                newBalance += data.amount;
             }
             else {
-                newBalace -= data.amount;
+                newBalance -= data.amount;
             }
             await tx.wallet.update({
                 where: { id: data.wallet_id },
-                data: { balance: newBalace }
+                data: { balance: newBalance }
             });
             return newTransaction;
         });
+        // 4. Cek Budget (Optimized)
+        if (result.type === "EXPENSE") {
+            await this.checkOverBudget(userId, result.transaction_date);
+        }
+        return result;
     }
-    async getTransactions(userId, month, year, type, search) {
+    // --- HELPER PRIVATE: Cek Budget (SUDAH DI-OPTIMASI) ---
+    async checkOverBudget(userId, transactionDate) {
+        try {
+            // A. Ambil Budget Bulan Ini
+            const budget = await this.budgetRepo.findByMonth(userId, transactionDate);
+            if (!budget)
+                return;
+            // B. Tentukan Awal & Akhir Bulan
+            const startOfMonth = new Date(transactionDate.getFullYear(), transactionDate.getMonth(), 1);
+            const endOfMonth = new Date(transactionDate.getFullYear(), transactionDate.getMonth() + 1, 0);
+            // C. [UPDATE] Pakai Aggregate Function (Lebih Cepat)
+            const totalExpense = await this.transactionRepo.sumExpenseByMonth(userId, startOfMonth, endOfMonth);
+            const limit = Number(budget.monthly_limit);
+            // D. Cek Kondisi
+            if (totalExpense > limit) {
+                const percentage = Math.round((totalExpense / limit) * 100);
+                const title = "\uD83D\uDEA8 Over Budget Alert!";
+                const message = `Waduh! Pengeluaranmu bulan ini (Rp ${totalExpense.toLocaleString()}) sudah tembus ${percentage}% dari budget. Rem dikit dong!`;
+                await this.notificationService.sendAlert(userId, title, message);
+                if (process.env.NODE_ENV === "development") {
+                    console.log(`[NOTIF] Over budget alert sent to User ${userId}. Total: ${totalExpense}, Limit: ${limit}`);
+                }
+            }
+        }
+        catch (error) {
+            console.error("[WARNING] Gagal mengecek budget:", error);
+        }
+    }
+    async getTransactions(userId, month, year, type, search, page = 1, limit = 10) {
         const now = new Date();
         const targetMonth = month ? month - 1 : now.getMonth();
         const targetYear = year || now.getFullYear();
@@ -54,17 +107,28 @@ export class TransactionService {
             typeEnum = TransactionType.INCOME;
         else if (type === "EXPENSE")
             typeEnum = TransactionType.EXPENSE;
-        return await this.transactionRepo.findAll(userId, {
+        const { data, total } = await this.transactionRepo.findAll(userId, {
             startDate,
             endDate,
-            ...(search && { search }),
-            ...(typeEnum && { type: typeEnum })
+            search,
+            type: typeEnum,
+            page,
+            limit
         });
+        return {
+            data: data,
+            meta: {
+                page: page,
+                limit: limit,
+                total_items: total,
+                total_pages: Math.ceil(total / limit)
+            }
+        };
     }
     async getTransactionDetail(userId, transactionId) {
         const transaction = await this.transactionRepo.findById(transactionId);
         if (!transaction)
-            throw new Error("Transaksi tidak dimuka");
+            throw new Error("Transaksi tidak ditemukan");
         if (transaction.user_id !== userId)
             throw new Error("Akses ditolak");
         return transaction;
@@ -77,19 +141,19 @@ export class TransactionService {
         if (data.wallet_id && data.wallet_id !== oldTransaction.wallet_id) {
             throw new Error("Tidak dapat memindakan wallet saat update. silakan hapus dan buat baru.");
         }
-        return await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx) => {
             const wallet = await this.walletRepo.findById(oldTransaction.wallet_id);
             if (!wallet)
-                throw new Error("Wallet tidak dimukan");
-            // A. REVERT (Kembalikan saldo lama)
+                throw new Error("Wallet tidak ditemukan");
             let currentBalance = Number(wallet.balance);
+            // Revert saldo lama
             if (oldTransaction.type === "INCOME")
                 currentBalance -= Number(oldTransaction.amount);
             else
                 currentBalance += Number(oldTransaction.amount);
-            // B. APPLY (Terapkan data baru)
             const newAmount = data.amount !== undefined ? data.amount : Number(oldTransaction.amount);
             const newType = data.type !== undefined ? data.type : oldTransaction.type;
+            // Apply saldo baru
             if (newType === "INCOME")
                 currentBalance += newAmount;
             else
@@ -112,11 +176,16 @@ export class TransactionService {
             }
             return await this.transactionRepo.update(transactionId, updateData, tx);
         });
+        // Trigger cek budget lagi setelah update (optional, tapi bagus ada)
+        if (result.type === "EXPENSE") {
+            await this.checkOverBudget(userId, result.transaction_date);
+        }
+        return result;
     }
     async deleteTransaction(userId, transactionId) {
         const transaction = await this.transactionRepo.findById(transactionId);
         if (!transaction || transaction.user_id !== userId)
-            throw new Error("Transaksi tidak dimukan");
+            throw new Error("Transaksi tidak ditemukan");
         const wallet = await this.walletRepo.findById(transaction.wallet_id);
         if (!wallet)
             throw new Error("Wallet terkait tidak ditemukan");
@@ -133,7 +202,7 @@ export class TransactionService {
                 where: { id: wallet.id },
                 data: { balance: reverseBalance }
             });
-            return { message: "Transaksi berasil di hapus dan saldo dikembalikan" };
+            return { message: "Transaksi berhasil dihapus dan saldo dikembalikan" };
         });
     }
 }

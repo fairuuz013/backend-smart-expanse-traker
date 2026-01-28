@@ -1,18 +1,25 @@
-import { PrismaClient } from "./generated/client";
+// src/database.ts
+import { PrismaClient } from "./generated";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import config from "./utils/env.js";
-let prisma;
-const getPrisma = () => {
-    if (!prisma) {
-        const pool = new Pool({
-            connectionString: config.DATABASE_URL
-        });
-        const adapter = new PrismaPg(pool);
-        prisma = new PrismaClient({ adapter });
-    }
-    return prisma;
+const globalForPrisma = globalThis;
+const prismaClientSingleton = () => {
+    // Neon menggunakan SSL, pastikan pool-nya menghandle ini
+    const pool = new Pool({
+        connectionString: config.DATABASE_URL
+    });
+    const adapter = new PrismaPg(pool);
+    // Di Prisma 7.2, saat pakai adapter, 
+    // kita tidak perlu lagi mengoper datasourceUrl di sini
+    return new PrismaClient({
+        adapter,
+        log: ["query", "info", "warn", "error"],
+    });
 };
-const prismaInstanse = getPrisma();
-export default prismaInstanse;
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+if (config.NODE_ENV !== "production") {
+    globalForPrisma.prisma = prisma;
+}
+export default prisma;
 //# sourceMappingURL=database.js.map

@@ -2,100 +2,109 @@ import type { CreateTransactionDTO, UpdateTransactionDTO } from "../validations/
 export declare class TransactionService {
     private transactionRepo;
     private walletRepo;
+    private budgetRepo;
+    private notificationService;
+    private categoryRepo;
     constructor();
     createTransaction(userId: string, data: CreateTransactionDTO): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: import("@prisma/client-runtime-utils").Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
-    getTransactions(userId: string, month?: number, year?: number, type?: string, search?: string): Promise<({
-        wallet: {
-            name: string;
+    private checkOverBudget;
+    getTransactions(userId: string, month?: number, year?: number, type?: string, search?: string, page?: number, limit?: number): Promise<{
+        data: ({
+            wallet: {
+                id: string;
+                name: string;
+            };
+            category: {
+                id: number;
+                name: import("../generated").$Enums.CategoryOption;
+                type: import("../generated").$Enums.TransactionType;
+            };
+            attachments: {
+                created_at: Date;
+                id: string;
+                transaction_id: string;
+                file_path: string;
+                file_type: string;
+            }[];
+        } & {
+            created_at: Date;
             id: string;
             user_id: string;
-            created_at: Date;
-            balance: import("@prisma/client-runtime-utils").Decimal;
-            type: string;
-            deleted_at: Date | null;
-        };
-        category: {
             name: string;
-            id: number;
-            user_id: string | null;
-            created_at: Date;
             type: import("../generated").$Enums.TransactionType;
             deleted_at: Date | null;
-            icon: string | null;
+            amount: import("@prisma/client-runtime-utils").Decimal;
+            note: string | null;
+            transaction_date: Date;
+            updated_at: Date;
+            category_id: number;
+            wallet_id: string;
+        })[];
+        meta: {
+            page: number;
+            limit: number;
+            total_items: number;
+            total_pages: number;
         };
-    } & {
-        name: string;
-        id: string;
-        user_id: string;
-        created_at: Date;
-        type: import("../generated").$Enums.TransactionType;
-        deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
-        amount: import("@prisma/client-runtime-utils").Decimal;
-        note: string | null;
-        transaction_date: Date;
-        updated_at: Date;
-    })[]>;
+    }>;
     getTransactionDetail(userId: string, transactionId: string): Promise<{
         wallet: {
-            name: string;
+            created_at: Date;
             id: string;
             user_id: string;
-            created_at: Date;
+            name: string;
+            type: import("../generated").$Enums.WalletType;
             balance: import("@prisma/client-runtime-utils").Decimal;
-            type: string;
             deleted_at: Date | null;
         };
         category: {
-            name: string;
+            created_at: Date;
             id: number;
             user_id: string | null;
-            created_at: Date;
+            name: import("../generated").$Enums.CategoryOption;
             type: import("../generated").$Enums.TransactionType;
             deleted_at: Date | null;
-            icon: string | null;
         };
     } & {
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: import("@prisma/client-runtime-utils").Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
     updateTransaction(userId: string, transactionId: string, data: UpdateTransactionDTO): Promise<{
-        name: string;
+        created_at: Date;
         id: string;
         user_id: string;
-        created_at: Date;
+        name: string;
         type: import("../generated").$Enums.TransactionType;
         deleted_at: Date | null;
-        category_id: number;
-        wallet_id: string;
         amount: import("@prisma/client-runtime-utils").Decimal;
         note: string | null;
         transaction_date: Date;
         updated_at: Date;
+        category_id: number;
+        wallet_id: string;
     }>;
     deleteTransaction(userId: string, transactionId: string): Promise<{
         message: string;
